@@ -1,11 +1,12 @@
 import user from "../models/userModels.js";
 import User from "../models/userModels.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken"
 
 const registerUser = async (req, res) => {
-  const { name, email, phone, password } = req.body;
+  const { name, email, phone, password , bio} = req.body;
 
-  if (!name || !email || !phone || !password) {
+  if (!name || !email || !phone || !password || !bio)    {
     res.status(409);
     throw new Error("Please Fill All Details !.....");
   }
@@ -25,14 +26,25 @@ const registerUser = async (req, res) => {
   const hashedPassword = bcrypt.hashSync(password , salt);
 
   //REGISTER USER
-  let user = await User.create({ name, email, phone, password : hashedPassword });
+  let user = await User.create({ name, email, phone, password : hashedPassword ,bio});
 
   if (!user) {
     res.status(400);
     throw new Error("User Not Created");
   }
 
-  res.status(201).json(user);
+  res.status(201).json({
+    id : user._id,
+    name : user.name ,
+    bio : user.bio,
+    email : user.email ,
+    phone : user.phone ,
+    isAdmin : user.isAdmin ,
+    isActive : user.isActive , 
+    credits : user.credits ,
+    token : generateToken(user._id)
+
+  });
 
   res.send("USER REGISTERED !...");
 };
@@ -55,7 +67,17 @@ const loginUser = async (req, res) => {
   let user = await User.findOne({ email: email });
 
   if(user && await bcrypt.compare(password , user.password)){
-    res.status(200).json(user)
+    res.status(200).json({
+    id : user._id,
+    name : user.name ,
+    email : user.email ,
+    phone : user.phone ,
+    isAdmin : user.isAdmin ,
+    isActive : user.isActive , 
+    credits : user.credits ,
+    token : generateToken(user._id)
+
+  })
   }else{
     res.status(400)
     throw new Error("Invalid credentials!....")
@@ -63,6 +85,20 @@ const loginUser = async (req, res) => {
 
   }
 
-const authController = { registerUser, loginUser };
+  //Protected controller
+
+  const privateController = (req , res) => {
+    // console.log(req.user)
+    res.send("i am private controller " + req.user.name)
+  }
+
+
+  //Generate token
+
+  const generateToken = (id) =>{
+    return jwt.sign({id} , process.env.JWT_SECERT , {expiresIn : '30d'})
+  }
+
+const authController = { registerUser, loginUser , privateController};
 
 export default authController;
