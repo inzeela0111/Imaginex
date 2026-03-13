@@ -1,9 +1,11 @@
 import express from "express"
-import followController from "../controller/folloowController.js"
+import followController from "../controller/followController.js"
 import protect from "../middleWare/authMiddleware.js"
 
 const router = express.Router()
 
- router.put("/:uid" , protect , followController.followUserRequest)
+ router.put("/follow/:uid" , protect.forUser , followController.followUserRequest)
+ router.put("/unfollow/:uid" , protect.forUser , followController.unfollowUserRequest)
+
 
 export default router

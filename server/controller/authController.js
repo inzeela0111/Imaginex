@@ -1,5 +1,5 @@
-import user from "../models/userModels.js";
-import User from "../models/userModels.js";
+import user from "../models/userModel.js";
+import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 
@@ -76,7 +76,6 @@ const loginUser = async (req, res) => {
     isActive : user.isActive , 
     credits : user.credits ,
     token : generateToken(user._id)
-
   })
   }else{
     res.status(400)
@@ -96,7 +95,7 @@ const loginUser = async (req, res) => {
   //Generate token
 
   const generateToken = (id) =>{
-    return jwt.sign({id} , process.env.JWT_SECERT , {expiresIn : '30d'})
+    return jwt.sign({id} , process.env.JWT_SECRET , {expiresIn : '30d'})
   }
 
 const authController = { registerUser, loginUser , privateController};
