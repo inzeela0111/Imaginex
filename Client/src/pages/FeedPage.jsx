@@ -1,0 +1,105 @@
+import { useState } from 'react';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
+import PostCard from '../components/PostCard';
+
+const mockPosts = [
+  {
+    id: 1,
+    image: 'https://picsum.photos/seed/feed1/400/500',
+    prompt: 'A futuristic city in the clouds',
+    likes: 1240,
+    isLiked: false,
+    aspectRatio: '4/5',
+    user: { name: 'Elena Cyber', username: 'elenac', avatar: 'https://picsum.photos/seed/user2/40/40' }
+  },
+  {
+    id: 2,
+    image: 'https://picsum.photos/seed/feed2/400/300',
+    prompt: 'Neon cyber cat sitting on a keyboard',
+    likes: 892,
+    isLiked: true,
+    aspectRatio: '4/3',
+    user: { name: 'Max Pixel', username: 'mpix', avatar: 'https://picsum.photos/seed/user3/40/40' }
+  },
+  {
+    id: 3,
+    image: 'https://picsum.photos/seed/feed3/400/600',
+    prompt: 'Surrealist landscape with floating clocks',
+    likes: 342,
+    isLiked: false,
+    aspectRatio: '2/3',
+    user: { name: 'Dali Dreams', username: 'dalid', avatar: 'https://picsum.photos/seed/user4/40/40' }
+  },
+  {
+    id: 4,
+    image: 'https://picsum.photos/seed/feed4/400/400',
+    prompt: 'Fantasy forest with glowing mushrooms',
+    likes: 2100,
+    isLiked: false,
+    aspectRatio: '1/1',
+    user: { name: 'Arthur Pen', username: 'artpen', avatar: 'https://picsum.photos/seed/user5/40/40' }
+  },
+  {
+    id: 5,
+    image: 'https://picsum.photos/seed/feed5/400/450',
+    prompt: 'Cyberpunk samurai in neon rain',
+    likes: 456,
+    isLiked: false,
+    aspectRatio: '4/4.5',
+    user: { name: 'Kato Neo', username: 'katon', avatar: 'https://picsum.photos/seed/user6/40/40' }
+  },
+  {
+    id: 6,
+    image: 'https://picsum.photos/seed/feed6/400/550',
+    prompt: 'Abstract geometric shapes in vibrant colors',
+    likes: 76,
+    isLiked: false,
+    aspectRatio: '3/4',
+    user: { name: 'Geo Art', username: 'geoart', avatar: 'https://picsum.photos/seed/user7/40/40' }
+  }
+];
+
+export default function FeedPage() {
+  const [activeTab, setActiveTab] = useState('Latest');
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      
+      <div className="max-w-7xl mx-auto flex">
+        <Sidebar />
+        
+        {/* Main Content Area */}
+        <main className="flex-1 md:ml-64 p-6 min-h-[calc(100vh-64px)] animate-fadeIn">
+          
+          {/* Tabs */}
+          <div className="flex items-center gap-6 mb-8 border-b border-white/10">
+            {['Latest', 'Following'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`py-4 px-2 font-medium transition-colors relative ${
+                  activeTab === tab ? 'text-white' : 'text-gray-400 hover:text-gray-200'
+                }`}
+              >
+                {tab}
+                {activeTab === tab && (
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-t-full shadow-[0_0_10px_rgba(124,58,237,0.5)]"></div>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Masonry Grid */}
+          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 masonry-grid">
+            {mockPosts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+          
+        </main>
+      </div>
+    </div>
+  );
+}
