@@ -6,5 +6,9 @@ const router = express.Router()
 
 router.get("/followers" , protect.forUser , profileController.getMyFollowers)
 router.get("/followings" , protect.forUser , profileController.getMyFollowings)
+router.get("/all" , protect.forUser , profileController.getAllUsers)
+
+router.get("/:name" ,  profileController.getProfile)
+
 
 export default router

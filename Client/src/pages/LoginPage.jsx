@@ -1,18 +1,51 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sparkles, Mail, Lock } from 'lucide-react';
+import { Sparkles, Mail, Lock, Loader } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../features/auth/authSlice';
+import { toast } from 'react-toastify';
 
 export default function LoginPage() {
   // const [email, setEmail] = useState('');
   // const [password, setPassword] = useState('');
-  const navigate = useNavigate();
 
- const [formData , setFormData] = useState({
+
+//   const navigate = useNavigate();
+
+//  const [formData , setFormData] = useState({
+//     email : "",
+//     password : "",
+//   })
+
+//  const {email , password} = formData
+
+//  const handleChange = (e) => {
+//   setFormData({
+//     ...formData,
+//     [e.target.name] : e.target.value
+//   })
+//  }
+
+
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     console.log("Login submitted:", { email, password });
+//     // Mock login success and redirect
+//     navigate('/feed');
+  // };
+
+ const navigate = useNavigate();
+  const dispatch = useDispatch()
+
+const {user , isLoading , isSuccess , isError , message} = useSelector(state => state.auth)
+
+  const [formData , setFormData] = useState({
     email : "",
     password : "",
   })
 
- const {email , password} = formData
+ const { email , password} = formData
 
  const handleChange = (e) => {
   setFormData({
@@ -21,14 +54,30 @@ export default function LoginPage() {
   })
  }
 
-
-
-  const handleSubmit = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    console.log("Login submitted:", { email, password });
-    // Mock login success and redirect
-    navigate('/feed');
+    //login user
+    dispatch(loginUser(formData))
   };
+
+useEffect(() =>{
+if(user && isSuccess){
+ navigate("/feed")
+}
+
+if(isError && message){
+ toast.error(message,{position : "top-center" })
+}
+
+},[user , isError , message])
+
+
+if(isLoading){
+  return(
+   <Loader/>
+  )
+}
+
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 relative overflow-hidden">
@@ -46,7 +95,7 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <form onSubmit={handleLogin} className="flex flex-col gap-5">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1.5">Email</label>
               <div className="relative">

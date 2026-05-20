@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      unique : true,
       required: [true, "Please Enter Your Name"],
     },
     email: {
@@ -33,7 +34,7 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    followings: [
+    following: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

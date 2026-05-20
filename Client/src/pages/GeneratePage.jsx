@@ -1,29 +1,96 @@
 import { useState } from 'react';
-import { Sparkles, Wand2, RefreshCw } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Sparkles, Wand2, RefreshCw, Trash2 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { useDispatch } from 'react-redux';
+import { updateCredits } from '../features/auth/authSlice';
 
 export default function GeneratePage() {
   const [prompt, setPrompt] = useState('');
   const [selectedStyle, setSelectedStyle] = useState('Realistic');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
   const [result, setResult] = useState(null);
+  const { user: currentUser } = useSelector(state => state.auth);
+  const navigate = useNavigate();
 
   const styles = [
     'Realistic', 'Anime', 'Oil Painting', 'Cyberpunk', 'Watercolor', 'Sketch', '3D Render', 'Noir'
   ];
 
-  const handleGenerate = () => {
+  // Generate image handler with credit management
+  const dispatch = useDispatch();
+  const handleGenerate = async () => {
     if (!prompt.trim()) return;
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+
     setIsGenerating(true);
     setResult(null);
-    
-    // Simulate generation delay
-    setTimeout(() => {
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+      };
+
+      const res = await axios.post('/api/posts', {
+        prompt: `${prompt} in ${selectedStyle} style`,
+        caption: prompt,
+        action: 'generate',
+      }, config);
+
+      setResult(res.data.imageLink);
+      // Update credits in Redux and localStorage if returned
+      if (res.data.credits !== undefined) {
+        dispatch(updateCredits(res.data.credits));
+      }
+    } catch (err) {
+      console.error('Error generating image:', err);
+      toast.error('Failed to generate image. Please try again.', { position: 'top-center' });
+    } finally {
       setIsGenerating(false);
-      setResult(`https://picsum.photos/seed/${Math.random()}/800/800`);
-    }, 2000);
+    }
+  };
+
+  const handlePostToFeed = async () => {
+    if (!result || isPosting) return;
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+
+    setIsPosting(true);
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${currentUser.token}`
+        }
+      };
+
+      await axios.post('/api/posts', {
+        prompt: `${prompt} in ${selectedStyle} style`,
+        caption: prompt,
+        imageLink: result,
+        action: 'post'
+      }, config);
+
+      toast.success("Successfully posted to feed!", { position: "top-center" });
+      navigate('/feed');
+    } catch (err) {
+      console.error("Error posting to feed:", err);
+      toast.error("Failed to post to feed. Please try again.", { position: "top-center" });
+    } finally {
+      setIsPosting(false);
+    }
   };
 
   const handleEnhance = () => {
@@ -34,7 +101,10 @@ export default function GeneratePage() {
     <div className="min-h-screen bg-background">
       <Navbar />
       
+      {/*
       <div className="max-w-7xl mx-auto flex">
+      */}
+      <div className="max-w-7xl mx-auto">
         <Sidebar />
         
         <main className="flex-1 md:ml-64 p-4 md:p-8 min-h-[calc(100vh-64px)] animate-fadeIn">
@@ -180,12 +250,35 @@ export default function GeneratePage() {
                       
                       {/* Sub-actions if result exists */}
                       {result && !isGenerating && (
-                        <div className="grid grid-cols-2 gap-4 mt-4">
-                          <button className="py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium transition-colors text-sm">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+                          <button 
+                            onClick={() => {
+                              if(window.confirm("Are you sure you want to reject this image? It will be permanently removed from your screen.")) {
+                                setResult(null);
+                              }
+                            }}
+                            className="py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 hover:text-red-300 font-medium transition-colors text-sm flex items-center justify-center gap-2"
+                          >
+                            <Trash2 className="w-4 h-4" /> Reject Image
+                          </button>
+                          <button 
+                            onClick={() => window.open(result, '_blank')}
+                            className="py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium transition-colors text-sm flex items-center justify-center"
+                          >
                             Download HD
                           </button>
-                          <button className="py-3 rounded-xl bg-primary/20 border border-primary/50 text-white hover:bg-primary/30 font-medium transition-colors text-sm">
-                            Post to Feed
+                          <button 
+                            onClick={handlePostToFeed}
+                            disabled={isPosting}
+                            className="py-3 rounded-xl bg-primary/20 border border-primary/50 text-white hover:bg-primary/30 font-medium transition-colors text-sm disabled:opacity-50 flex items-center justify-center gap-2"
+                          >
+                            {isPosting ? (
+                              <>
+                                <LoadingSpinner size="sm" className="text-white" /> Posting...
+                              </>
+                            ) : (
+                              "Post to Feed"
+                            )}
                           </button>
                         </div>
                       )}

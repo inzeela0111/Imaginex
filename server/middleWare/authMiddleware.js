@@ -11,6 +11,14 @@ const forUser = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
       let decoded = jwt.verify(token, process.env.JWT_SECRET);
       let user = await User.findById(decoded.id).select("-password");
+      if (!user) {
+        res.status(401);
+        throw new Error("User not found");
+      }
+      if (!user.isActive) {
+        res.status(403);
+        throw new Error("Your account has been blocked by the admin.");
+      }
       req.user = user;
       next();
     } else {
@@ -33,6 +41,14 @@ const forAdmin = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
       let decoded = jwt.verify(token, process.env.JWT_SECRET);
       let user = await User.findById(decoded.id).select("-password");
+      if (!user) {
+        res.status(401);
+        throw new Error("User not found");
+      }
+      if (!user.isActive) {
+        res.status(403);
+        throw new Error("Your account has been blocked by the admin.");
+      }
       req.user = user;
       if(user.isAdmin){
         next();

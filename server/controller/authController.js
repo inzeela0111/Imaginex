@@ -13,12 +13,13 @@ const registerUser = async (req, res) => {
 
   //Check if user already exits
 
-  let emailExit = await User.findOne({ email: email });
-  let phoneExit = await User.findOne({ phone: phone });
+  let userNameExist = await User.findOne({name : name });
+  let emailExist = await User.findOne({ email: email });
+  let phoneExist = await User.findOne({ phone: phone });
 
-  if (emailExit || phoneExit) {
+  if (userNameExist || emailExist || phoneExist) {
     res.status(409);
-    throw new Error("User Already exits ! ........");
+    throw new Error("User Already Exist ! ........");
   }
 
   //Hash Password
@@ -42,6 +43,7 @@ const registerUser = async (req, res) => {
     isAdmin : user.isAdmin ,
     isActive : user.isActive , 
     credits : user.credits ,
+    createdAt : user.createdAt,
     token : generateToken(user._id)
 
   });
@@ -71,10 +73,12 @@ const loginUser = async (req, res) => {
     id : user._id,
     name : user.name ,
     email : user.email ,
+    bio : user.bio ,
     phone : user.phone ,
     isAdmin : user.isAdmin ,
     isActive : user.isActive , 
     credits : user.credits ,
+    createdAt : user.createdAt,
     token : generateToken(user._id)
   })
   }else{

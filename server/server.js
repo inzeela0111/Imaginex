@@ -12,6 +12,8 @@ import connectDB from "./config/dbConfig.js"
     import adminRoutes from "./routes/adminRoutes.js"
     import postRoutes from "./routes/postRoutes.js"
     import savedPostRoutes from "./routes/savedPostRoutes.js"
+    import notificationRoutes from "./routes/notificationRoutes.js"
+    import creditRequestRoutes from "./routes/creditRequestRoutes.js"
 
 dotenv.config()
 
@@ -51,6 +53,12 @@ app.use("/api/posts" , postRoutes)
 
 //SAVED POSTS 
 app.use("/api/saved-posts" , savedPostRoutes)
+
+//NOTIFICATION ROUTES
+app.use("/api/notifications" , notificationRoutes)
+
+//CREDIT REQUEST ROUTES
+app.use("/api/credits/request" , creditRequestRoutes)
 
 
 //Error Handler

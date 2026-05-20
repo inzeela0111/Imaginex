@@ -4,15 +4,10 @@ import { Sparkles, Mail, Lock, User, Phone, Text } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../features/auth/authSlice';
 import { toast } from 'react-toastify';
+import Loader from '../components/Loader';
 
 export default function RegisterPage() {
 
-  // const [username, setUsername] = useState('');
-  // const [email, setEmail] = useState('');
-  // const [phone , setPhone] = useState('');
-  // const [password, setPassword] = useState('');
-  // const [confirmPassword, setConfirmPassword] = useState('');
-  // const [bio , setBio] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch()
 
@@ -35,19 +30,11 @@ const {user , isLoading , isSuccess , isError , message} = useSelector(state => 
   })
  }
 
-  const handleSubmit = (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-    // if (password !== confirmPassword) {
-    //   alert("Passwords don't match");
-    //   return;
-    // }
-    // console.log(formData);
-    //REGISTER USER
+    //reister user
     dispatch(registerUser(formData))
-    // navigate('/feed');
   };
-
-
 
 useEffect(() =>{
 if(user){
@@ -63,7 +50,7 @@ if(isError && message){
 
 if(isLoading){
   return(
-   <h1>Loading....</h1>
+   <Loader/>
   )
 }
 
@@ -87,7 +74,7 @@ if(isLoading){
 
 
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <form onSubmit={handleRegister} className="flex flex-col gap-5">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1.5">Username</label>
               <div className="relative">

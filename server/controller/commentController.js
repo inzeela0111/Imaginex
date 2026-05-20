@@ -1,5 +1,6 @@
 import Comment from "../models/commentModel.js"
 import Post from "../models/postModel.js"
+import Notification from "../models/notificationModel.js"
 
 const getComments = async(req,res) => {
    const postId = req.params.pid
@@ -41,6 +42,22 @@ const addComment = async(req,res) => {
    await newComment.save()
    await newComment.populate("user")
    await newComment.populate("post")
+
+    // Trigger Comment Notification (exclude self-comments)
+    try {
+      const postCreatorId = post.user?._id || post.user;
+      if (postCreatorId && postCreatorId.toString() !== userId.toString()) {
+        await Notification.create({
+          recipient: postCreatorId,
+          sender: userId,
+          type: "comment",
+          post: post._id,
+          commentText: text
+        });
+      }
+    } catch (notificationErr) {
+      console.error("Error creating comment notification:", notificationErr);
+    }
 
       if(!newComment){
     res.status(409)

@@ -13,6 +13,7 @@ router.post("/" , protect.forUser , postController.generateAndPost)
 router.get("/:pid" , protect.forUser , postController.getPost)
 router.put("/:pid" , protect.forUser , postController.likeAndUnlikePost)
 router.post("/:pid" , protect.forUser , postController.reportPost)
+router.delete("/:pid" , protect.forUser , postController.deletePost)
 
 
 //SAVE POST ROUTES
