@@ -34,7 +34,7 @@ app.use(express.urlencoded())
 
 
 //default routes
-app.get('/' , (req,res) =>{
+app.get('/api' , (req,res) =>{
     res.json({
         message : "WELCOME TO IMAGINEX API...."
     })
