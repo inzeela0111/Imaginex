@@ -2,8 +2,12 @@ import express from "express"
 import dotenv from "dotenv"
 import colors from "colors"
 import connectDB from "./config/dbConfig.js"
+import path from "path"
+import { fileURLToPath } from 'url'
 
-
+// Resolve __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 //LOCAL IMPORTS
     import authRoutes from "./routes/authRoutes.js"
     import followRoutes from "./routes/followRoutes.js"
@@ -60,6 +64,15 @@ app.use("/api/notifications" , notificationRoutes)
 //CREDIT REQUEST ROUTES
 app.use("/api/credits/request" , creditRequestRoutes)
 
+
+// Serve Frontend in Production
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../Client/dist')))
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../Client', 'dist', 'index.html'))
+    })
+}
 
 //Error Handler
 app.use(errorHandler)
