@@ -69,7 +69,7 @@ app.use("/api/credits/request" , creditRequestRoutes)
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../Client/dist')))
 
-    app.get('*', (req, res) => {
+    app.get(/(.*)/, (req, res) => {
         res.sendFile(path.resolve(__dirname, '../Client', 'dist', 'index.html'))
     })
 }
