@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
-    "build": "npm install --prefix Client && npm run build --prefix Client"
+    "build": "npm install --prefix Client --include=dev && npm run build --prefix Client"
   },
   "dependencies": {
     "@google/genai": "^1.44.0",
