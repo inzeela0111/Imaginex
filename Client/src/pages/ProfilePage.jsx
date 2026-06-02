@@ -7,63 +7,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../features/auth/authSlice";
 import axios from "axios";
 
-const mockUser = {
-  // name: 'Alex Artist',
-  // username: 'alexcreates',
-  // avatar: 'https://picsum.photos/seed/user1/150/150',
-  // cover: 'https://picsum.photos/seed/cover1/1200/400',
-  // bio: 'Digital alchemist. Transforming thoughts into pixels. ✨',
-  // followers: 12400,
-  // following: 342,
-  // isFollowing: false
-};
-
-const userPosts = [
-  /*
-  {
-    id: 101,
-    image: "https://picsum.photos/seed/userpost1/400/500",
-    prompt: "Neon cyber cat sitting on a keyboard",
-    likes: 892,
-    isLiked: false,
-    aspectRatio: "4/5",
-    user: mockUser,
-  },
-  {
-    id: 102,
-    image: "https://picsum.photos/seed/userpost2/400/400",
-    prompt: "Surrealist landscape with floating clocks",
-    likes: 342,
-    isLiked: false,
-    aspectRatio: "1/1",
-    user: mockUser,
-  },
-  {
-    id: 103,
-    image: "https://picsum.photos/seed/userpost3/400/600",
-    prompt: "Fantasy forest with glowing mushrooms",
-    likes: 2100,
-    isLiked: true,
-    aspectRatio: "2/3",
-    user: mockUser,
-  },
-  */
-];
-
 export default function ProfilePage() {
-  /*
-  const { user , isSuccess , isLoading , isError ,message } = useSelector((state) => state.auth);
-  */
-  const { user: currentUser, profile, isLoading } = useSelector((state) => state.auth);
+  const { user: currentUser, profile, isLoading, isError, message } = useSelector((state) => state.auth);
   const { username } = useParams();
-  // console.log(username)
+
   const dispatch = useDispatch()
   const [activeTab, setActiveTab] = useState("Posts");
-  /*
-  const [isFollowing, setIsFollowing] = useState(mockUser.isFollowing);
-  */
+
   const [isFollowing, setIsFollowing] = useState(false);
   const [allPosts, setAllPosts] = useState([]);
+  const [loadingTimeout, setLoadingTimeout] = useState(false);
 
   useEffect(() => {
     if (profile && currentUser) {
@@ -100,9 +53,18 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    //fetch Profile
-    dispatch(getProfile(username))
-  }, [username])
+    setLoadingTimeout(false);
+    console.log("Fetching profile for:", username);
+    dispatch(getProfile(username));
+
+    // Timeout: agar 10 second mein response na aaye to error dikho
+    const timer = setTimeout(() => {
+      setLoadingTimeout(true);
+      console.error("Profile load timeout for:", username);
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, [username]);
 
   useEffect(() => {
     const fetchAllPosts = async () => {
@@ -122,10 +84,7 @@ export default function ProfilePage() {
     fetchAllPosts();
   }, [currentUser, username]);
 
-  // In a real app, we'd fetch user data based on the username param.
-  // We're using the mockUser for demonstration.
-
-  if (isLoading || !profile || !profile.name) {
+  if (isLoading && !loadingTimeout) {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
@@ -133,6 +92,38 @@ export default function ProfilePage() {
           <Sidebar />
           <main className="flex-1 md:ml-64 p-6 min-h-[calc(100vh-64px)] flex items-center justify-center">
             <div className="text-white text-lg animate-pulse">Loading Profile...</div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || loadingTimeout || !profile || !profile.name) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="max-w-7xl mx-auto flex">
+          <Sidebar />
+          <main className="flex-1 md:ml-64 p-6 min-h-[calc(100vh-64px)] flex flex-col items-center justify-center gap-4">
+            <div className="text-6xl">😕</div>
+            <h2 className="text-white text-2xl font-bold">Profile Load Failed</h2>
+            <p className="text-gray-400 text-sm text-center">
+              {loadingTimeout
+                ? `Server se response nahi mila. Server chal raha hai? (Port check karo)`
+                : message || `The profile "@${username}" could not be loaded.`}
+            </p>
+            <button
+              onClick={() => { setLoadingTimeout(false); dispatch(getProfile(username)); }}
+              className="mt-2 px-6 py-2 bg-primary text-white rounded-full text-sm font-medium hover:bg-primary-light transition-all"
+            >
+              🔄 Retry
+            </button>
+            <button
+              onClick={() => window.history.back()}
+              className="px-6 py-2 bg-white/10 text-white rounded-full text-sm font-medium hover:bg-white/20 transition-all"
+            >
+              Go Back
+            </button>
           </main>
         </div>
       </div>
@@ -183,9 +174,6 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/*
-      <div className="max-w-7xl mx-auto flex">
-      */}
       <div className="max-w-7xl mx-auto">
         <Sidebar />
 
@@ -204,22 +192,6 @@ export default function ProfilePage() {
 
             {/* Avatar & Info */}
             <div className="absolute -bottom-12 left-6 md:left-12 flex items-end gap-6 z-20">
-              {/* <img 
-                src='https://picsum.photos/seed/user1/150/150'
-                alt={user.name} 
-                className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-background bg-card object-cover ring-2 ring-primary/50"
-              /> */}
-              {/*
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-background bg-card object-cover ring-2 ring-primary/50  flex items-center justify-center font-extrabold text-2xl">
-                {user.name[0]}
-              </div>
-              <div className="mb-2">
-                <h1 className="text-2xl md:text-3xl font-heading font-bold text-white shadow-sm first-letter:uppercase">
-                  {user.name}
-                </h1>
-                <p className="text-gray-400">@{username || user.username}</p>
-              </div>
-              */}
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-background bg-card object-cover ring-2 ring-primary/50  flex items-center justify-center font-extrabold text-2xl first-letter:uppercase text-white">
                 {profile?.name ? profile.name[0] : ""}
               </div>
@@ -232,20 +204,6 @@ export default function ProfilePage() {
             </div>
 
             {/* Actions */}
-            {/*
-            <div className="absolute -bottom-6 right-6 z-20 hidden sm:block">
-              <button
-                onClick={() => setIsFollowing(!isFollowing)}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 shadow-xl ${
-                  isFollowing
-                    ? "bg-white/10 text-white hover:bg-white/20 border border-white/20"
-                    : "bg-primary text-white hover:bg-primary-light hover:scale-105"
-                }`}
-              >
-                {isFollowing ? "Following" : "Follow"}
-              </button>
-            </div>
-            */}
             {currentUser && profile && (currentUser._id !== profile._id && currentUser.id !== profile._id) && (
               <div className="absolute -bottom-6 right-6 z-20 hidden sm:block">
                 <button
@@ -262,20 +220,6 @@ export default function ProfilePage() {
             )}
           </div>
 
-          {/*
-          <div className="px-2 md:px-8 mb-8 sm:hidden">
-            <button
-              onClick={() => setIsFollowing(!isFollowing)}
-              className={`w-full py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                isFollowing
-                  ? "bg-white/10 text-white hover:bg-white/20 border border-white/20"
-                  : "bg-primary text-white hover:bg-primary-light"
-              }`}
-            >
-              {isFollowing ? "Following" : "Follow"}
-            </button>
-          </div>
-          */}
           {currentUser && profile && (currentUser._id !== profile._id && currentUser.id !== profile._id) && (
             <div className="px-2 md:px-8 mb-8 sm:hidden">
               <button
@@ -293,29 +237,6 @@ export default function ProfilePage() {
 
           {/* Bio & Stats */}
           <div className="px-2 md:px-12 mb-8">
-            {/*
-            <p className="text-gray-300 max-w-2xl text-sm md:text-base mb-4 leading-relaxed">
-              {user.bio}
-            </p>
-            <div className="flex gap-6">
-              <div className="flex flex-col">
-                <span className="text-lg font-bold text-white">
-                  {user.followers}
-                </span>
-                <span className="text-xs text-gray-500 uppercase tracking-wider">
-                  Followers
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-bold text-white">
-                  {user.following}
-                </span>
-                <span className="text-xs text-gray-500 uppercase tracking-wider">
-                  Following
-                </span>
-              </div>
-            </div>
-            */}
             <p className="text-gray-300 max-w-2xl text-sm md:text-base mb-4 leading-relaxed">
               {profile?.bio || "No bio yet."}
             </p>
@@ -377,11 +298,6 @@ export default function ProfilePage() {
 
           {/* Grid */}
           <div className="px-2 md:px-12 columns-1 sm:columns-2 lg:columns-3 xl:columns-4 masonry-grid">
-            {/*
-            {userPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-            */}
             {displayPosts.length === 0 ? (
               <div className="text-gray-500 py-8 text-center col-span-full">No posts found in this tab.</div>
             ) : (

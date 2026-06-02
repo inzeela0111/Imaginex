@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import authService from './authService';
-import { Profiler } from 'react';
 
 const userExist = JSON.parse(localStorage.getItem('user'))
 
@@ -8,7 +7,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState: {
     user : userExist || null ,
-    profile : {} ,
+    profile : null ,
     isLoading : false ,
     isSuccess : false ,
     isError : false ,
@@ -71,10 +70,11 @@ const authSlice = createSlice({
       state.user = ""
     })
 
-     .addCase(getProfile.pending , (state , action) => {
+    .addCase(getProfile.pending , (state , action) => {
       state.isLoading = true 
       state.isSuccess = false
       state.isError = false
+      state.profile = null
     })
     .addCase(getProfile.fulfilled , (state , action) => {
       state.isLoading = false 
@@ -86,8 +86,8 @@ const authSlice = createSlice({
       state.isLoading = false 
       state.isSuccess = false
       state.isError = true
-      state.message = ""
-      state.user = null
+      state.profile = null
+      state.message = action.payload || "Failed to load profile"
     })
   }
 });
@@ -125,20 +125,6 @@ export const logoutUser = createAsyncThunk("AUTH/LOGOUT" , async(formData , thun
  localStorage.removeItem("user")
 })
 
-
-/*
-//Get Profile
-export const getProfile = createAsyncThunk("GET/PROFILE" , async(name , thunkAPI) => {
-  try {
-    // return await authService.fetchProfile(name)
-    console.log(name)
-  } catch (error) {
-    console.log(error.response.data.message)
-    let message = error.response.data.message
-    return thunkAPI.rejectWithValue(message)
-  }
-})
-*/
 
 //Get Profile
 export const getProfile = createAsyncThunk("GET/PROFILE" , async(name , thunkAPI) => {

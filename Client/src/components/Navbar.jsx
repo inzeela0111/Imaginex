@@ -65,12 +65,6 @@ export default function Navbar() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
-          {/*
-          <button className="text-gray-400 hover:text-white transition-colors relative">
-             <Bell className="w-5 h-5" />
-             <span className="absolute top-0 right-0 w-2 h-2 bg-accent rounded-full border border-card"></span>
-          </button>
-          */}
           {currentUser ? (
             <Link to="/notifications" className="text-gray-400 hover:text-white transition-colors relative p-1">
                <Bell className="w-5 h-5" />
@@ -85,18 +79,6 @@ export default function Navbar() {
           )}
           
           <div className="relative">
-            {/*
-            <button 
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-2 focus:outline-none"
-            >
-              <img 
-                src="https://picsum.photos/seed/user1/40/40" 
-                alt="Avatar" 
-                className="w-8 h-8 rounded-full border border-white/20 hover:border-primary transition-colors object-cover"
-              />
-            </button>
-            */}
             <button 
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="flex items-center gap-2 focus:outline-none"
@@ -108,23 +90,7 @@ export default function Navbar() {
               />
             </button>
             
-            {/* Dropdown Menu Mock */}
-            {/*
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-card border border-white/10 rounded-xl shadow-xl overflow-hidden animate-fadeIn py-1">
-                <div className="px-4 py-3 border-b border-white/5">
-                  <p className="text-sm font-medium text-white">Alex Artist</p>
-                  <p className="text-xs text-gray-400">@alexcreates</p>
-                </div>
-                <Link to="/profile/alexcreates" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
-                  <User className="w-4 h-4" /> Profile
-                </Link>
-                <Link to="/login" className="block px-4 py-2 text-sm text-red-400 hover:bg-white/5 transition-colors">
-                  Sign out
-                </Link>
-              </div>
-            )}
-            */}
+
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-card border border-white/10 rounded-xl shadow-xl overflow-hidden animate-fadeIn py-1 z-50">
                 <div className="px-4 py-3 border-b border-white/5">

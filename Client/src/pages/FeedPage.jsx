@@ -6,65 +6,6 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import PostCard from '../components/PostCard';
 
-/*
-const mockPosts = [
-  {
-    id: 1,
-    image: 'https://picsum.photos/seed/feed1/400/500',
-    prompt: 'A futuristic city in the clouds',
-    likes: 1240,
-    isLiked: false,
-    aspectRatio: '4/5',
-    user: { name: 'Elena Cyber', username: 'elenac', avatar: 'https://picsum.photos/seed/user2/40/40' }
-  },
-  {
-    id: 2,
-    image: 'https://picsum.photos/seed/feed2/400/300',
-    prompt: 'Neon cyber cat sitting on a keyboard',
-    likes: 892,
-    isLiked: true,
-    aspectRatio: '4/3',
-    user: { name: 'Max Pixel', username: 'mpix', avatar: 'https://picsum.photos/seed/user3/40/40' }
-  },
-  {
-    id: 3,
-    image: 'https://picsum.photos/seed/feed3/400/600',
-    prompt: 'Surrealist landscape with floating clocks',
-    likes: 342,
-    isLiked: false,
-    aspectRatio: '2/3',
-    user: { name: 'Dali Dreams', username: 'dalid', avatar: 'https://picsum.photos/seed/user4/40/40' }
-  },
-  {
-    id: 4,
-    image: 'https://picsum.photos/seed/feed4/400/400',
-    prompt: 'Fantasy forest with glowing mushrooms',
-    likes: 2100,
-    isLiked: false,
-    aspectRatio: '1/1',
-    user: { name: 'Arthur Pen', username: 'artpen', avatar: 'https://picsum.photos/seed/user5/40/40' }
-  },
-  {
-    id: 5,
-    image: 'https://picsum.photos/seed/feed5/400/450',
-    prompt: 'Cyberpunk samurai in neon rain',
-    likes: 456,
-    isLiked: false,
-    aspectRatio: '4/4.5',
-    user: { name: 'Kato Neo', username: 'katon', avatar: 'https://picsum.photos/seed/user6/40/40' }
-  },
-  {
-    id: 6,
-    image: 'https://picsum.photos/seed/feed6/400/550',
-    prompt: 'Abstract geometric shapes in vibrant colors',
-    likes: 76,
-    isLiked: false,
-    aspectRatio: '3/4',
-    user: { name: 'Geo Art', username: 'geoart', avatar: 'https://picsum.photos/seed/user7/40/40' }
-  }
-];
-*/
-
 export default function FeedPage() {
   const [activeTab, setActiveTab] = useState('Following');
   const [posts, setPosts] = useState([]);
@@ -124,9 +65,6 @@ export default function FeedPage() {
     <div className="min-h-screen bg-background">
       <Navbar />
       
-      {/*
-      <div className="max-w-7xl mx-auto flex">
-      */}
       <div className="max-w-7xl mx-auto">
         <Sidebar />
         

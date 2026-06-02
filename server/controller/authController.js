@@ -34,7 +34,7 @@ const registerUser = async (req, res) => {
     throw new Error("User Not Created");
   }
 
-  res.status(201).json({
+  return res.status(201).json({
     id : user._id,
     name : user.name ,
     bio : user.bio,
@@ -45,10 +45,7 @@ const registerUser = async (req, res) => {
     credits : user.credits ,
     createdAt : user.createdAt,
     token : generateToken(user._id)
-
   });
-
-  res.send("USER REGISTERED !...");
 };
 
 

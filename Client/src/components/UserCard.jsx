@@ -4,9 +4,6 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 export default function UserCard({ user }) {
-  /*
-  const [isFollowing, setIsFollowing] = useState(user.isFollowing);
-  */
   const { user: currentUser } = useSelector((state) => state.auth);
   const [isFollowing, setIsFollowing] = useState(user.isFollowing);
   const [followersCount, setFollowersCount] = useState(user.followers);
@@ -54,19 +51,6 @@ export default function UserCard({ user }) {
       <p className="text-sm text-gray-300 font-medium mb-4">
         {followersCount.toLocaleString()} <span className="text-gray-500 font-normal">followers</span>
       </p>
-      
-      {/*
-      <button 
-        onClick={() => setIsFollowing(!isFollowing)}
-        className={`w-full py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
-          isFollowing 
-            ? 'bg-white/10 text-white hover:bg-white/20' 
-            : 'bg-primary text-white hover:bg-primary-light hover:scale-105'
-        }`}
-      >
-        {isFollowing ? 'Following' : 'Follow'}
-      </button>
-      */}
       {currentUser && (currentUser._id !== user.id && currentUser.id !== user.id) && (
         <button 
           onClick={handleFollowToggle}

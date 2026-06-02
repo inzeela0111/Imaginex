@@ -1,41 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sparkles, Mail, Lock, Loader } from 'lucide-react';
+import { Sparkles, Mail, Lock } from 'lucide-react';
+import LoadingSpinner from '../components/LoadingSpinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../features/auth/authSlice';
 import { toast } from 'react-toastify';
 
 export default function LoginPage() {
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-
-
-//   const navigate = useNavigate();
-
-//  const [formData , setFormData] = useState({
-//     email : "",
-//     password : "",
-//   })
-
-//  const {email , password} = formData
-
-//  const handleChange = (e) => {
-//   setFormData({
-//     ...formData,
-//     [e.target.name] : e.target.value
-//   })
-//  }
-
-
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     console.log("Login submitted:", { email, password });
-//     // Mock login success and redirect
-//     navigate('/feed');
-  // };
-
- const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch()
 
 const {user , isLoading , isSuccess , isError , message} = useSelector(state => state.auth)
@@ -74,7 +46,7 @@ if(isError && message){
 
 if(isLoading){
   return(
-   <Loader/>
+   <LoadingSpinner/>
   )
 }
 
@@ -105,7 +77,7 @@ if(isLoading){
                   type="email" 
                   value={email}
                   onChange={handleChange}
-                  // onChange={(e) => setEmail(e.target.value)}
+
                   placeholder="name@example.com"
                   className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
                   required
@@ -125,7 +97,7 @@ if(isLoading){
                   type="password" 
                   value={password}
                   onChange={handleChange}
-                  // onChange={(e) => setPassword(e.target.value)}
+
                   placeholder="••••••••"
                   className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
                   required

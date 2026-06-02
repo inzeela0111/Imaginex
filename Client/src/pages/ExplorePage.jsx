@@ -10,64 +10,6 @@ import { Search, Sparkles, Palette } from 'lucide-react';
 
 const artStyles = ['All', 'Realistic', 'Anime', 'Oil Painting', 'Cyberpunk', 'Watercolor', 'Sketch', '3D Render', 'Noir'];
 
-/*
-const trendingUsers = [
-  { id: 1, name: 'Alice Ray', username: 'aliceray', avatar: 'https://picsum.photos/seed/user10/80/80', followers: 12500, isFollowing: false },
-  { id: 2, name: 'Bob Sketch', username: 'bobsketch', avatar: 'https://picsum.photos/seed/user11/80/80', followers: 8300, isFollowing: true },
-  { id: 3, name: 'Charlie Ink', username: 'charliek', avatar: 'https://picsum.photos/seed/user12/80/80', followers: 45000, isFollowing: false },
-  { id: 4, name: 'Diana Colors', username: 'dianac', avatar: 'https://picsum.photos/seed/user13/80/80', followers: 3200, isFollowing: false },
-  { id: 5, name: 'Eve Render', username: 'everender', avatar: 'https://picsum.photos/seed/user14/80/80', followers: 18900, isFollowing: true },
-];
-
-const mockExplorePosts = [
-  {
-    id: 11,
-    image: 'https://picsum.photos/seed/explore1/400/400',
-    prompt: 'Space station interior view',
-    likes: 890,
-    isLiked: false,
-    aspectRatio: '1/1',
-    user: { name: 'Alice Ray', username: 'aliceray', avatar: 'https://picsum.photos/seed/user10/40/40' }
-  },
-  {
-    id: 12,
-    image: 'https://picsum.photos/seed/explore2/400/600',
-    prompt: 'Underwater city glowing lights',
-    likes: 1205,
-    isLiked: true,
-    aspectRatio: '2/3',
-    user: { name: 'Bob Sketch', username: 'bobsketch', avatar: 'https://picsum.photos/seed/user11/40/40' }
-  },
-  {
-    id: 13,
-    image: 'https://picsum.photos/seed/explore3/400/500',
-    prompt: 'Minimalist landscape design',
-    likes: 450,
-    isLiked: false,
-    aspectRatio: '4/5',
-    user: { name: 'Charlie Ink', username: 'charliek', avatar: 'https://picsum.photos/seed/user12/40/40' }
-  },
-  {
-    id: 14,
-    image: 'https://picsum.photos/seed/explore4/400/350',
-    prompt: 'Mecha robot fighting dragon',
-    likes: 3200,
-    isLiked: false,
-    aspectRatio: '8/7',
-    user: { name: 'Eve Render', username: 'everender', avatar: 'https://picsum.photos/seed/user14/40/40' }
-  },
-  {
-    id: 15,
-    image: 'https://picsum.photos/seed/explore5/400/550',
-    prompt: 'Oil painting of a rainy cafe',
-    likes: 234,
-    isLiked: false,
-    aspectRatio: '3/4',
-    user: { name: 'Diana Colors', username: 'dianac', avatar: 'https://picsum.photos/seed/user13/40/40' }
-  }
-];
-*/
-
 export default function ExplorePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStyle, setSelectedStyle] = useState('All');
@@ -149,9 +91,6 @@ export default function ExplorePage() {
     <div className="min-h-screen bg-background">
       <Navbar />
       
-      {/*
-      <div className="max-w-7xl mx-auto flex">
-      */}
       <div className="max-w-7xl mx-auto">
         <Sidebar />
         

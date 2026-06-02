@@ -101,9 +101,6 @@ export default function GeneratePage() {
     <div className="min-h-screen bg-background">
       <Navbar />
       
-      {/*
-      <div className="max-w-7xl mx-auto flex">
-      */}
       <div className="max-w-7xl mx-auto">
         <Sidebar />
         

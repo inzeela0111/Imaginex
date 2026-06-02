@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, Compass, Sparkles, User, LogOut, ShieldAlert, Zap } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, logoutUser } from '../features/auth/authSlice';
+import { logoutUser } from '../features/auth/authSlice';
 import { useState } from 'react';
 import CreditRequestModal from './CreditRequestModal';
 

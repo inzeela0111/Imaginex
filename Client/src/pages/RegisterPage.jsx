@@ -4,7 +4,7 @@ import { Sparkles, Mail, Lock, User, Phone, Text } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../features/auth/authSlice';
 import { toast } from 'react-toastify';
-import Loader from '../components/Loader';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function RegisterPage() {
 
@@ -50,7 +50,7 @@ if(isError && message){
 
 if(isLoading){
   return(
-   <Loader/>
+   <LoadingSpinner/>
   )
 }
 
@@ -84,7 +84,7 @@ if(isLoading){
                   type="text" 
                   value={name}
                   onChange={handleChange}
-                  // onChange={(e) => setUsername(e.target.value)}
+
                   placeholder="art_creator"
                   className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
                   required
@@ -101,7 +101,7 @@ if(isLoading){
                   type="email" 
                   value={email}
                   onChange={handleChange}
-                  // onChange={(e) => setEmail(e.target.value)}
+
                   placeholder="name@example.com"
                   className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
                   required
@@ -118,7 +118,7 @@ if(isLoading){
                   type="number" 
                   value={phone}
                   onChange={handleChange}
-                  // onChange={(e) => setPhone(e.target.value)}
+
                   placeholder="+919891234567"
                   className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
                   required
@@ -135,7 +135,7 @@ if(isLoading){
                   type="password" 
                   value={password}
                   onChange={handleChange}
-                  // onChange={(e) => setPassword(e.target.value)}
+
                   placeholder="••••••••"
                   className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
                   required
@@ -143,20 +143,7 @@ if(isLoading){
               </div>
             </div>
 
-            {/* <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">Confirm Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input 
-                  type="password" 
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
-                  required
-                />
-              </div>
-            </div> */}
+
 
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1.5">Your Bio</label>
@@ -167,7 +154,7 @@ if(isLoading){
                   type="text" 
                   value={bio}
                   onChange={handleChange}
-                  // onChange={(e) => setBio(e.target.value)}
+
                   placeholder="Enter Your Bio"
                   className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-primary/50 transition-colors"
                   required
